@@ -14,6 +14,16 @@ from codex_sdk import Codex
 
 Use UV as the primary workflow in this project.
 
+## Do I need `uv init`, `uv venv`, and shell activation steps?
+
+The main docs assume you are already inside an existing UV-managed project.
+
+From that point forward, installation is:
+
+```bash
+uv add codex-sdk-unofficial
+```
+
 ## Why does this require the Codex CLI?
 
 This SDK wraps the CLI by launching it as a subprocess and consuming event output.

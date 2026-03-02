@@ -35,7 +35,7 @@ nav:
   - Home: index.md
   - Dedication: dedication.md
   - Getting Started:
-      - Installation: getting-started/installation.md
+      - Installation (Existing UV Project): getting-started/installation.md
       - Prerequisites and Codex CLI: getting-started/prerequisites-and-cli.md
       - Your First Script: getting-started/your-first-script.md
       - Your First Streaming Turn: getting-started/your-first-streaming-turn.md

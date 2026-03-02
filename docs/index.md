@@ -2,7 +2,7 @@
 
 > `codex-sdk-unofficial` is a community-maintained project and is **not an official OpenAI SDK**.
 
-This site is a full, ground-up guide for installing, understanding, and using the SDK with an **UV-first workflow**.
+This site is a full guide for using the SDK in an **existing UV-managed project**, with an **UV-first workflow**.
 
 ## Start Here In 5 Minutes
 

@@ -2,8 +2,8 @@
 
 Prerequisites:
 - Basic terminal usage
-- Python 3.10+
-- `uv`
+- Existing UV-managed Python project
+- `codex` CLI installed
 
 What you'll learn:
 - Why this SDK depends on the Codex CLI
