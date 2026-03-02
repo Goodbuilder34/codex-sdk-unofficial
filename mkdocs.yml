@@ -1,0 +1,80 @@
+site_name: codex-sdk-unofficial
+site_description: Unofficial, community-maintained Python SDK for the Codex CLI.
+site_url: https://goodbuilder34.github.io/codex-sdk-unofficial/
+repo_url: https://github.com/Goodbuilder34/codex-sdk-unofficial
+repo_name: Goodbuilder34/codex-sdk-unofficial
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - tables
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Dedication: dedication.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Prerequisites and Codex CLI: getting-started/prerequisites-and-cli.md
+      - Your First Script: getting-started/your-first-script.md
+      - Your First Streaming Turn: getting-started/your-first-streaming-turn.md
+  - Concepts:
+      - How This SDK Works: concepts/how-this-sdk-works.md
+      - Threads, Turns, Events, and Items: concepts/threads-turns-events-items.md
+      - Input Model: concepts/input-model.md
+  - Guides:
+      - Basic Run and Stateful Conversations: guides/basic-run-and-stateful-conversations.md
+      - Streaming Events: guides/streaming-events.md
+      - Structured Output: guides/structured-output.md
+      - Image Inputs: guides/image-inputs.md
+      - Resume Threads: guides/resume-threads.md
+      - Options (Codex, Thread, Turn): guides/options-codex-thread-turn.md
+      - Config Overrides and TOML: guides/config-overrides-and-toml.md
+      - Environment Variables and Originator: guides/environment-variables-and-originator.md
+      - Cancellation and Aborts: guides/cancellation-and-aborts.md
+      - Error Handling Patterns: guides/error-handling-patterns.md
+      - Security and Sandboxing: guides/security-and-sandboxing.md
+  - Cookbook:
+      - Quick Recipes: cookbook/quick-recipes.md
+      - Automation Scripts: cookbook/automation-scripts.md
+      - Structured JSON Workflows: cookbook/structured-json-workflows.md
+      - Long-Running Stream Consumers: cookbook/long-running-stream-consumers.md
+      - CI Usage Patterns: cookbook/ci-usage-patterns.md
+  - Reference:
+      - API Overview: reference/api-overview.md
+      - Codex Class: reference/codex-class.md
+      - Thread Class: reference/thread-class.md
+      - Options Reference: reference/options-reference.md
+      - Events Reference: reference/events-reference.md
+      - Items Reference: reference/items-reference.md
+      - Type Aliases and Compatibility: reference/type-aliases-and-compat.md
+  - Troubleshooting:
+      - Common Errors: troubleshooting/common-errors.md
+  - FAQ: faq.md
+  - Contributing:
+      - Docs Contribution Guide: contributing/docs-contribution-guide.md
+  - Releasing:
+      - GitHub and PyPI Release Flow: releasing/github-and-pypi-release-flow.md
+  - Appendix:
+      - pip Fallback: appendix/pip-fallback.md

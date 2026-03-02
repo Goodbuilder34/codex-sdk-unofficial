@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.1.2 - 2026-03-02
+
+- Launch a full MkDocs + Material documentation site with beginner-first, UV-first guides.
+- Add complete docs structure: getting started, concepts, guides, cookbook, reference, troubleshooting, FAQ, contributing, releasing, and pip fallback appendix.
+- Add strict docs navigation/build config via `mkdocs.yml`.
+- Add GitHub Pages docs workflow with automatic deploy from `main`.
+- Update CI to enforce strict docs build.
+- Convert README into a concise UV-first entrypoint that links to full documentation.
+- Add docs dependency group in `pyproject.toml`.
+
 ## v0.1.1 - 2026-03-02
 
 - Fix Python 3.12 import/runtime compatibility for recursive config type aliases.

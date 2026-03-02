@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codex-sdk-unofficial"
-version = "0.1.1"
+version = "0.1.2"
 description = "Unofficial Python SDK for the OpenAI Codex CLI."
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -36,6 +36,11 @@ Issues = "https://github.com/Goodbuilder34/codex-sdk-unofficial/issues"
 [dependency-groups]
 dev = [
   "pytest>=8.3.0",
+]
+docs = [
+  "mkdocs>=1.6.0",
+  "mkdocs-material>=9.5.0",
+  "pymdown-extensions>=10.8",
 ]
 
 [tool.hatch.build.targets.wheel]

@@ -1,30 +1,33 @@
-# Unofficial Codex SDK (Python)
+# codex-sdk-unofficial
 
 Unofficial, community-maintained Python SDK for the Codex CLI.
 
-This project is **not an official OpenAI SDK**. It wraps the `codex` CLI from `@openai/codex`, spawning the CLI and exchanging JSONL events over stdin/stdout.
+> This is **not an official OpenAI SDK**.
 
-## Installation
+## Documentation
+
+Full docs site (UV-first, beginner-first):
+- https://goodbuilder34.github.io/codex-sdk-unofficial/
+
+Local docs preview:
 
 ```bash
-pip install codex-sdk-unofficial
+uv run --group docs mkdocs serve
 ```
 
-Requires Python 3.10+ and a `codex` executable on your `PATH` (or pass `codex_path_override`).
+## Quickstart (UV-First)
 
-## Status
-
-- Package name: `codex-sdk-unofficial`
-- Import name: `codex_sdk`
-- Current version: `0.1.1`
-- Stability: alpha
-
-## Quickstart
+```bash
+uv init codex-sdk-app
+cd codex-sdk-app
+uv venv
+source .venv/bin/activate
+uv add codex-sdk-unofficial
+uv run python -c "from codex_sdk import Codex; print('import-ok')"
+```
 
 ```python
-from codex_sdk import Codex, __version__
-
-print("codex_sdk version:", __version__)
+from codex_sdk import Codex
 
 codex = Codex()
 thread = codex.start_thread()
@@ -34,118 +37,32 @@ print(turn.final_response)
 print(turn.items)
 ```
 
-Call `run()` repeatedly on the same `Thread` to continue a conversation.
+Run:
 
-```python
-next_turn = thread.run("Implement the fix")
+```bash
+uv run python your_script.py
 ```
 
-## Streaming responses
+## Package Info
 
-`run()` buffers events until completion. To react to intermediate progress, use `run_streamed()`.
+- Package name: `codex-sdk-unofficial`
+- Import name: `codex_sdk`
+- Current version: `0.1.2`
 
-```python
-streamed = thread.run_streamed("Diagnose the test failure and propose a fix")
-for event in streamed.events:
-    if event["type"] == "item.completed":
-        print("item", event["item"])
-    elif event["type"] == "turn.completed":
-        print("usage", event["usage"])
+## Dev Commands
+
+```bash
+PYTHONPATH=src uv run pytest -q
+uv run --group docs mkdocs build --strict
+uv run --with build python -m build
 ```
 
-## Structured output
+## Publishing
 
-```python
-schema = {
-    "type": "object",
-    "properties": {
-        "summary": {"type": "string"},
-        "status": {"type": "string", "enum": ["ok", "action_required"]},
-    },
-    "required": ["summary", "status"],
-    "additionalProperties": False,
-}
+Tag pushes (`v*`) trigger `.github/workflows/publish.yml`.
 
-turn = thread.run("Summarize repository status", {"output_schema": schema})
-print(turn.final_response)
+Manual upload fallback:
+
+```bash
+uv run --with twine twine upload dist/*
 ```
-
-## Attaching images
-
-```python
-thread.run(
-    [
-        {"type": "text", "text": "Describe these screenshots"},
-        {"type": "local_image", "path": "./ui.png"},
-        {"type": "local_image", "path": "./diagram.jpg"},
-    ]
-)
-```
-
-## Resuming an existing thread
-
-```python
-thread = codex.resume_thread("thread_id_here")
-thread.run("Implement the fix")
-```
-
-## Working directory and execution options
-
-```python
-thread = codex.start_thread(
-    {
-        "working_directory": "/path/to/project",
-        "skip_git_repo_check": True,
-        "sandbox_mode": "workspace-write",
-    }
-)
-```
-
-## Overriding CLI environment
-
-```python
-codex = Codex(
-    {
-        "env": {"PATH": "/usr/local/bin"},
-    }
-)
-```
-
-## Global `--config` overrides
-
-```python
-codex = Codex(
-    {
-        "config": {
-            "show_raw_agent_reasoning": True,
-            "sandbox_workspace_write": {"network_access": True},
-        }
-    }
-)
-```
-
-## Publish Checklist
-
-1. Update `pyproject.toml` version and `src/codex_sdk/__init__.py` `__version__`.
-2. Run tests:
-   ```bash
-   PYTHONPATH=src uv run pytest -q
-   ```
-3. Build artifacts:
-   ```bash
-   uv run --with build python -m build
-   ```
-4. Commit and create a version tag:
-   ```bash
-   git add .
-   git commit -m "release: v0.1.1"
-   git tag -a v0.1.1 -m "v0.1.1"
-   ```
-5. Push GitHub branch + tags:
-   ```bash
-   git push origin main --tags
-   ```
-6. Publish to PyPI (after creating a trusted publisher or API token):
-   ```bash
-   uv run --with twine twine upload dist/*
-   ```

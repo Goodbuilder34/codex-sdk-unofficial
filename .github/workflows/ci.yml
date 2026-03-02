@@ -23,3 +23,6 @@ jobs:
 
       - name: Run tests
         run: PYTHONPATH=src uv run pytest -q
+
+      - name: Build docs (strict)
+        run: uv run --group docs mkdocs build --strict
