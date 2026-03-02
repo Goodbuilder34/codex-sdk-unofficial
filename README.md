@@ -16,7 +16,7 @@ Requires Python 3.10+ and a `codex` executable on your `PATH` (or pass `codex_pa
 
 - Package name: `codex-sdk-unofficial`
 - Import name: `codex_sdk`
-- Current version: `0.1.0`
+- Current version: `0.1.1`
 - Stability: alpha
 
 ## Quickstart
@@ -138,8 +138,8 @@ codex = Codex(
 4. Commit and create a version tag:
    ```bash
    git add .
-   git commit -m "release: v0.1.0"
-   git tag -a v0.1.0 -m "v0.1.0"
+   git commit -m "release: v0.1.1"
+   git tag -a v0.1.1 -m "v0.1.1"
    ```
 5. Push GitHub branch + tags:
    ```bash

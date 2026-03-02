@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Mapping, TypeAlias, TypeGuard
 
 CodexConfigValue: TypeAlias = (
-    str | int | float | bool | list["CodexConfigValue"] | "CodexConfigObject"
+    str | int | float | bool | list["CodexConfigValue"] | dict[str, "CodexConfigValue"]
 )
 CodexConfigObject: TypeAlias = dict[str, CodexConfigValue]
 
