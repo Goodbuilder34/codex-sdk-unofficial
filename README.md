@@ -17,11 +17,9 @@ uv run --group docs mkdocs serve
 
 ## Quickstart (UV-First)
 
+Assumes you are already inside an existing UV-managed project.
+
 ```bash
-uv init codex-sdk-app
-cd codex-sdk-app
-uv venv
-source .venv/bin/activate
 uv add codex-sdk-unofficial
 uv run python -c "from codex_sdk import Codex; print('import-ok')"
 ```

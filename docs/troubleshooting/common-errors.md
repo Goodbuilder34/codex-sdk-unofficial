@@ -41,15 +41,6 @@ Cause:
 Fix:
 - Use `threading.Event` or compatible object
 
-## UV-specific: `uv: command not found`
-
-Cause:
-- UV not installed or not on shell path
-
-Fix:
-- Install UV from official docs
-- Restart shell and verify `uv --version`
-
 ## UV-specific: Wrong interpreter in `uv run`
 
 Cause:

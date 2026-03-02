@@ -7,20 +7,15 @@ This site is a full, ground-up guide for installing, understanding, and using th
 ## Start Here In 5 Minutes
 
 Prerequisites:
-- Python 3.10+
-- [uv](https://docs.astral.sh/uv/)
+- Existing UV-managed Python project
 - `codex` CLI available on your machine
 
 What you'll do:
-- Create an environment with `uv`
+- Add the SDK dependency
 - Install the package
 - Run your first turn
 
 ```bash
-uv init codex-sdk-app
-cd codex-sdk-app
-uv venv
-source .venv/bin/activate
 uv add codex-sdk-unofficial
 uv run python -c "from codex_sdk import Codex; print('import-ok')"
 ```

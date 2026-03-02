@@ -1,41 +1,21 @@
-# Installation (UV-First)
+# Installation (UV Project Already Set Up)
 
 Prerequisites:
-- Python 3.10 or newer
-- `uv` installed
+- Existing UV-managed Python project
 - A working `codex` CLI installation
 
 What you'll learn:
-- How to install the SDK with `uv`
+- How to add the SDK dependency with `uv`
 - How to verify import and CLI availability
 - How to avoid the most common setup mistakes
 
-## 1) Install UV
-
-Use the official UV docs for your OS: [Install uv](https://docs.astral.sh/uv/getting-started/installation/).
-
-Verify:
-
-```bash
-uv --version
-```
-
-## 2) Create a Virtual Environment
-
-```bash
-uv init codex-sdk-app
-cd codex-sdk-app
-uv venv
-source .venv/bin/activate
-```
-
-## 3) Install The SDK
+## 1) Add The SDK
 
 ```bash
 uv add codex-sdk-unofficial
 ```
 
-## 4) Verify Python Import
+## 2) Verify Python Import
 
 ```bash
 uv run python -c "from codex_sdk import Codex, __version__; print(__version__)"
@@ -44,7 +24,7 @@ uv run python -c "from codex_sdk import Codex, __version__; print(__version__)"
 Expected output:
 - Prints a version like `0.1.2`
 
-## 5) Verify `codex` CLI Is Reachable
+## 3) Verify `codex` CLI Is Reachable
 
 ```bash
 uv run python -c "import shutil; print(shutil.which('codex'))"
@@ -57,6 +37,9 @@ If you get `None`:
 - Install Codex CLI
 - Ensure it is on `PATH`
 - Or pass `codex_path_override` in `CodexOptions`
+
+If you are not already in a UV project, follow the official UV setup docs first:
+- [UV Getting Started](https://docs.astral.sh/uv/getting-started/)
 
 ## First Run Sanity Check
 
