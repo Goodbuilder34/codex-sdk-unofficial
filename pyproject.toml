@@ -29,9 +29,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chase/codex-sdk-unofficial"
-Repository = "https://github.com/chase/codex-sdk-unofficial"
-Issues = "https://github.com/chase/codex-sdk-unofficial/issues"
+Homepage = "https://github.com/Goodbuilder34/codex-sdk-unofficial"
+Repository = "https://github.com/Goodbuilder34/codex-sdk-unofficial"
+Issues = "https://github.com/Goodbuilder34/codex-sdk-unofficial/issues"
 
 [dependency-groups]
 dev = [
