@@ -30,8 +30,8 @@ This SDK wraps the CLI by launching it as a subprocess and consuming event outpu
 
 ## Should I use `run()` or `run_streamed()`?
 
-- `run()` for simple final-result use cases
-- `run_streamed()` for live progress and fine-grained event handling
+- `run()` for simple final-result use cases (or `run(..., stream=True)` for simple live text output)
+- `run_streamed()` for raw events and fine-grained event handling
 
 ## Can I pass options as plain dicts?
 

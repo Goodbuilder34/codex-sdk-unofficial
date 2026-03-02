@@ -96,6 +96,166 @@ def test_run_streamed_uses_existing_thread_id() -> None:
     assert fake_exec.calls[0].thread_id == "thread_saved"
 
 
+def test_run_stream_true_streams_agent_message_text_without_duplicates(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    fake_exec = FakeExec(
+        [
+            json.dumps({"type": "thread.started", "thread_id": "thread_123"}),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hel"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hello"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hello"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hello!"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "turn.completed",
+                    "usage": {
+                        "cached_input_tokens": 1,
+                        "input_tokens": 2,
+                        "output_tokens": 3,
+                    },
+                }
+            ),
+        ]
+    )
+    thread = Thread(fake_exec, CodexOptions(), ThreadOptions())
+
+    result = thread.run("Hello", stream=True)
+
+    captured = capsys.readouterr()
+    assert captured.out == "Hello!\n"
+    assert result.final_response == "Hello!"
+    assert result.items == [{"id": "item_1", "type": "agent_message", "text": "Hello!"}]
+    assert result.usage == {
+        "cached_input_tokens": 1,
+        "input_tokens": 2,
+        "output_tokens": 3,
+    }
+
+
+def test_run_default_stream_false_prints_nothing(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    fake_exec = FakeExec(
+        [
+            json.dumps({"type": "thread.started", "thread_id": "thread_123"}),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hi"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Hi there"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "turn.completed",
+                    "usage": {
+                        "cached_input_tokens": 0,
+                        "input_tokens": 2,
+                        "output_tokens": 2,
+                    },
+                }
+            ),
+        ]
+    )
+    thread = Thread(fake_exec, CodexOptions(), ThreadOptions())
+
+    result = thread.run("Hello")
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert result.final_response == "Hi there"
+    assert result.items == [{"id": "item_1", "type": "agent_message", "text": "Hi there"}]
+
+
+def test_run_stream_true_raises_on_turn_failure_and_appends_newline(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    fake_exec = FakeExec(
+        [
+            json.dumps({"type": "thread.started", "thread_id": "thread_123"}),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Working..."},
+                }
+            ),
+            json.dumps({"type": "turn.failed", "error": {"message": "rate limit exceeded"}}),
+        ]
+    )
+    thread = Thread(fake_exec, CodexOptions(), ThreadOptions())
+
+    with pytest.raises(RuntimeError, match="rate limit exceeded"):
+        thread.run("fail", stream=True)
+
+    captured = capsys.readouterr()
+    assert captured.out == "Working...\n"
+
+
+def test_run_stream_true_does_not_append_extra_newline(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    fake_exec = FakeExec(
+        [
+            json.dumps({"type": "thread.started", "thread_id": "thread_123"}),
+            json.dumps(
+                {
+                    "type": "item.updated",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Done\n"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {"id": "item_1", "type": "agent_message", "text": "Done\n"},
+                }
+            ),
+            json.dumps(
+                {
+                    "type": "turn.completed",
+                    "usage": {
+                        "cached_input_tokens": 0,
+                        "input_tokens": 1,
+                        "output_tokens": 1,
+                    },
+                }
+            ),
+        ]
+    )
+    thread = Thread(fake_exec, CodexOptions(), ThreadOptions())
+
+    result = thread.run("finish", stream=True)
+
+    captured = capsys.readouterr()
+    assert captured.out == "Done\n"
+    assert result.final_response == "Done\n"
+
+
 def test_normalize_input_combines_text_and_extracts_images() -> None:
     prompt, images = normalize_input(
         [

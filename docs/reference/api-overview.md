@@ -23,7 +23,7 @@ from codex_sdk import Codex
 
 - `Codex.start_thread(options=None) -> Thread`
 - `Codex.resume_thread(thread_id, options=None) -> Thread`
-- `Thread.run(input, turn_options=None) -> Turn`
+- `Thread.run(input, turn_options=None, *, stream=False) -> Turn`
 - `Thread.run_streamed(input, turn_options=None) -> StreamedTurn`
 
 Compatibility aliases are also available:

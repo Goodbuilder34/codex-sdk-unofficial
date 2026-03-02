@@ -29,7 +29,7 @@ from codex_sdk import Codex
 
 codex = Codex()
 thread = codex.start_thread()
-turn = thread.run("Diagnose the test failure and propose a fix")
+turn = thread.run("Diagnose the test failure and propose a fix", stream=True)
 
 print(turn.final_response)
 print(turn.items)
@@ -45,7 +45,7 @@ uv run python your_script.py
 
 - Package name: `codex-sdk-unofficial`
 - Import name: `codex_sdk`
-- Current version: `0.1.2`
+- Current version: `0.1.3`
 
 ## Dev Commands
 

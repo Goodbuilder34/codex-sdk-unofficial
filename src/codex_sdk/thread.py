@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass
 from typing import Any, Iterator, Literal, Mapping, TypedDict, TypeAlias
 
@@ -118,23 +119,43 @@ class Thread:
         finally:
             schema_file.cleanup()
 
-    def run(self, input: Input, turn_options: TurnOptions | Mapping[str, object] | None = None) -> Turn:
+    def run(
+        self,
+        input: Input,
+        turn_options: TurnOptions | Mapping[str, object] | None = None,
+        *,
+        stream: bool = False,
+    ) -> Turn:
         generator = self._run_streamed_internal(input, turn_options)
         items: list[ThreadItem] = []
         final_response = ""
         usage: Usage | None = None
         turn_failure: ThreadError | None = None
+        streamed_text_by_item_id: dict[str, str] = {}
+        streamed_output_seen = False
+        streamed_output_ends_with_newline = False
 
         for event in generator:
             event_type = event.get("type")
-            if event_type == "item.completed":
+            if event_type in ("item.updated", "item.completed"):
                 item = event.get("item")
                 if isinstance(item, dict):
-                    if item.get("type") == "agent_message":
-                        text = item.get("text")
-                        if isinstance(text, str):
-                            final_response = text
-                    items.append(item)  # type: ignore[arg-type]
+                    if item.get("type") == "agent_message" and stream:
+                        streamed_chunk = _consume_agent_message_stream_chunk(
+                            item, streamed_text_by_item_id
+                        )
+                        if streamed_chunk:
+                            sys.stdout.write(streamed_chunk)
+                            sys.stdout.flush()
+                            streamed_output_seen = True
+                            streamed_output_ends_with_newline = streamed_chunk.endswith("\n")
+
+                    if event_type == "item.completed":
+                        if item.get("type") == "agent_message":
+                            text = item.get("text")
+                            if isinstance(text, str):
+                                final_response = text
+                        items.append(item)  # type: ignore[arg-type]
             elif event_type == "turn.completed":
                 event_usage = event.get("usage")
                 if isinstance(event_usage, dict):
@@ -145,11 +166,46 @@ class Thread:
                     turn_failure = event_error  # type: ignore[assignment]
                 break
 
+        if stream and streamed_output_seen and not streamed_output_ends_with_newline:
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+
         if turn_failure is not None:
             message = turn_failure.get("message")
             raise RuntimeError(message if isinstance(message, str) else "Turn failed")
 
         return Turn(items=items, final_response=final_response, usage=usage)
+
+
+def _consume_agent_message_stream_chunk(
+    item: Mapping[str, object], streamed_text_by_item_id: dict[str, str]
+) -> str:
+    text = item.get("text")
+    if not isinstance(text, str):
+        return ""
+
+    item_id = item.get("id")
+    key = item_id if isinstance(item_id, str) else "__unknown_agent_message__"
+    previous_text = streamed_text_by_item_id.get(key, "")
+    chunk = _find_stream_suffix(previous_text, text)
+    streamed_text_by_item_id[key] = text
+    return chunk
+
+
+def _find_stream_suffix(previous_text: str, current_text: str) -> str:
+    if current_text.startswith(previous_text):
+        return current_text[len(previous_text) :]
+
+    prefix_length = _common_prefix_length(previous_text, current_text)
+    return current_text[prefix_length:]
+
+
+def _common_prefix_length(left: str, right: str) -> int:
+    limit = min(len(left), len(right))
+    idx = 0
+    while idx < limit and left[idx] == right[idx]:
+        idx += 1
+    return idx
 
 
 def normalize_input(input: Input) -> tuple[str, list[str]]:

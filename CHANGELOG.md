@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.3 - 2026-03-02
+
+- Add simple streaming mode to `Thread.run(...)` via `stream=True` for live assistant text output.
+- Stream `agent_message` text from `item.updated` and `item.completed` events while preventing duplicate output by emitting only suffix deltas.
+- Preserve buffered `Turn` behavior (`items`, `final_response`, and `usage`) while adding stdout streaming support.
+- Add newline cleanup behavior for streamed output on completion/failure and keep `turn.failed` error raising semantics.
+- Add test coverage for streaming deltas, default non-stream behavior, failure newline handling, and newline non-duplication.
+- Update docs and README to document `run(..., stream=True)` as the simple streaming path and position `run_streamed()` as the advanced raw-event API.
+
 ## v0.1.2 - 2026-03-02
 
 - Launch a full MkDocs + Material documentation site with beginner-first, UV-first guides.

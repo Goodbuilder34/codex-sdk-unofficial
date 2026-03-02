@@ -7,11 +7,13 @@ Thread identifier. Usually populated after first `thread.started` event.
 
 ## Methods
 
-### `run(input, turn_options=None) -> Turn`
+### `run(input, turn_options=None, *, stream=False) -> Turn`
 Runs a buffered turn and returns:
 - `items: list[ThreadItem]`
 - `final_response: str`
 - `usage: Usage | None`
+
+If `stream=True`, assistant message text is written to stdout as it arrives.
 
 ### `run_streamed(input, turn_options=None) -> StreamedTurn`
 Returns `StreamedTurn(events=Iterator[ThreadEvent])`.
