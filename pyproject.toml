@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.24.2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codex-sdk-unofficial"
+version = "0.1.0"
+description = "Unofficial Python SDK for the OpenAI Codex CLI."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [
+  { name = "Unofficial Community Maintainers" }
+]
+keywords = [
+  "codex",
+  "openai",
+  "sdk",
+  "python",
+  "unofficial",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/chase/codex-sdk-unofficial"
+Repository = "https://github.com/chase/codex-sdk-unofficial"
+Issues = "https://github.com/chase/codex-sdk-unofficial/issues"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/codex_sdk"]
